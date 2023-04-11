@@ -1,0 +1,36 @@
+﻿@model List<Exercise>
+
+<h1>Exercises</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+@if (Model == null)
+{
+    <p>Nothing to show here...</p>
+}
+
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Exercise</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ExerciseName</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -16,7 +16,7 @@ namespace Exercitium.Controllers
         }
         public ActionResult Index()
         {
-            var exercises = _dbContext.Exercise.ToList();
+            var exercises = _dbContext.Exercises.ToList();
             return View(exercises);
         }
 
@@ -31,7 +31,7 @@ namespace Exercitium.Controllers
         {
             if (ModelState.IsValid)
             {
-                _dbContext.Exercise.Add(exercise);
+                _dbContext.Exercises.Add(exercise);
                 _dbContext.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -40,7 +40,7 @@ namespace Exercitium.Controllers
 
         public ActionResult Edit(int id)
         {
-            var exercise = _dbContext.Exercise.Find(id);
+            var exercise = _dbContext.Exercises.Find(id);
             if (exercise == null)
             {
                 return NotFound();
@@ -68,7 +68,7 @@ namespace Exercitium.Controllers
 
         public ActionResult Delete(int id)
         {
-            var exercise = _dbContext.Exercise.Find(id);
+            var exercise = _dbContext.Exercises.Find(id);
             if (exercise == null)
             {
                 return NotFound();
@@ -80,13 +80,13 @@ namespace Exercitium.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Exercise exercise)
         {
-            var exerciseToDelete = _dbContext.Exercise.Find(id);
+            var exerciseToDelete = _dbContext.Exercises.Find(id);
             if (exerciseToDelete == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Exercise.Remove(exerciseToDelete);
+            _dbContext.Exercises.Remove(exerciseToDelete);
             _dbContext.SaveChanges();
             return RedirectToAction("Index");
         }

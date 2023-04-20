@@ -27,7 +27,8 @@ namespace Exercitium.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            var response = new RegisterViewModel();
+            return View(response);
         }
 
         [HttpPost]
@@ -53,6 +54,44 @@ namespace Exercitium.Controllers
             }
             TempData["Error"] = "User not found";
             return View(loginViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
+        {
+
+            if (!ModelState.IsValid) return View(registerViewModel);
+
+            var user = await _userManager.FindByEmailAsync(registerViewModel.Email);
+
+            if (user != null)
+            {
+                TempData["Error"] = "This E-mail is already in use.";
+                return View(registerViewModel);
+            }
+
+            var newUser = new User()
+            {
+                Email = registerViewModel.Email,
+                UserName = registerViewModel.Email,
+                FirstName = registerViewModel.FirstName,
+                LastName = registerViewModel.LastName
+                
+            };
+
+            var newUserResponse = await _userManager.CreateAsync(newUser, registerViewModel.Password);
+
+            if (newUserResponse.Succeeded)
+                await _userManager.AddToRoleAsync(newUser, UserRoles.User);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

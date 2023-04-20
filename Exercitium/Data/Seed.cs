@@ -20,7 +20,7 @@ namespace Exercitium.Data
 
                 //Users
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-                string adminUserEmail = "jeremy@live.dk";
+                string adminUserEmail = "random";
 
                 var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
                 if (adminUser == null)
@@ -30,14 +30,14 @@ namespace Exercitium.Data
                         UserName = adminUserEmail,
                         Email = adminUserEmail,
                         EmailConfirmed = true,
-                        FirstName = "Jeremy",
-                        LastName = "Andersen"
+                        FirstName = "random",
+                        LastName = "random"
                     };
-                    await userManager.CreateAsync(newAdminUser, "!Strong99");
+                    await userManager.CreateAsync(newAdminUser, "random");
                     await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
                 }
 
-                string appUserEmail = "jeremyandersen99@gmail.com";
+                string appUserEmail = "random";
 
                 var appUser = await userManager.FindByEmailAsync(appUserEmail);
                 if (appUser == null)
@@ -47,10 +47,10 @@ namespace Exercitium.Data
                         UserName = appUserEmail,
                         Email = appUserEmail,
                         EmailConfirmed = true,
-                        FirstName = "Jerry",
-                        LastName = "Anderson"
+                        FirstName = "random",
+                        LastName = "random"
                     };
-                    await userManager.CreateAsync(newAppUser, "?Strong99");
+                    await userManager.CreateAsync(newAppUser, "random");
                     await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using Exercitium.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Exercitium.Controllers
 {
@@ -15,6 +16,8 @@ namespace Exercitium.Controllers
 
         public IActionResult Index()
         {
+            string userName = User.FindFirstValue(ClaimTypes.Name);
+            ViewBag.UserName = userName;
             return View();
         }
 

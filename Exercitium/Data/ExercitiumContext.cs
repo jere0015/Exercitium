@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Exercitium.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Exercitium.Data
 {
-    public class ExercitiumContext : DbContext
+    public class ExercitiumContext : IdentityDbContext<User>
     {
         public ExercitiumContext (DbContextOptions<ExercitiumContext> options)
             : base(options)
@@ -16,11 +17,10 @@ namespace Exercitium.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
+           base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Exercise> Exercise { get; set; }
-        public DbSet<Workout> Workout { get; set; }
-        public DbSet<User> User { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<Workout> Workouts { get; set; }
     }
 }

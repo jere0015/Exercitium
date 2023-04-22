@@ -8,6 +8,6 @@ namespace Exercitium.Models
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public List<Workout>? Workouts { get; set; }
+        public ICollection<Workout>? Workouts { get; set; }
     }
 }

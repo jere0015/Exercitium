@@ -61,6 +61,7 @@ namespace Exercitium.Controllers
                     .Select(we => new ExerciseViewModel
                     {
                         Id = we.Exercise.Id,
+                        ExerciseName = we.Exercise.ExerciseName,
                         Sets = we.Sets,
                         Reps = we.Reps,
                         Weight = we.Weight
@@ -98,6 +99,8 @@ namespace Exercitium.Controllers
                     DateTime = viewModel.DateTime,
                     UserId = userId.Id
                 };
+
+                workout.WorkoutExercises = new List<WorkoutExercise>();
 
                 foreach (var exercise in viewModel.Exercises)
                 {
@@ -156,6 +159,13 @@ namespace Exercitium.Controllers
                     Weight = we.Weight
                 }).ToList()
             };
+
+            viewModel.AvailableExercises = await _context.Exercises
+                .Select(e => new SelectListItem
+                {
+                    Value = e.Id.ToString(),
+                    Text = e.ExerciseName
+                }).ToListAsync();
 
             return View(viewModel);
         }

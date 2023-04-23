@@ -9,7 +9,7 @@
 
 <h2>Exercises</h2>
 
-@if (Model.WorkoutExercises.Count > 0)
+@if (Model?.Exercises?.Count != null)
 {
     <table class="table">
         <thead>
@@ -21,10 +21,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var workoutExercise in Model.WorkoutExercises)
+            @foreach (var workoutExercise in Model.Exercises)
             {
                 <tr>
-                    <td>@workoutExercise.Exercise.ExerciseName</td>
+                    <td>@workoutExercise.ExerciseName</td>
                     <td>@workoutExercise.Sets</td>
                     <td>@workoutExercise.Reps</td>
                     <td>@workoutExercise.Weight</td>

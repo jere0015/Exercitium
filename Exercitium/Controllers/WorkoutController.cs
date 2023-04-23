@@ -73,13 +73,20 @@ namespace Exercitium.Controllers
         public IActionResult Create()
         {
             var exercises = _context.Exercises.ToList();
+
+            var exerciseViewModels = exercises.Select(e => new ExerciseViewModel
+            {
+                Id = e.Id,
+                ExerciseName = e.ExerciseName,
+                Sets = 0,
+                Reps = 0,
+                Weight = 0,
+                IsSelected = false
+            }).ToList();
+
             var viewModel = new WorkoutCreateViewModel
             {
-                Exercises = exercises.Select(e => new ExerciseViewModel
-                {
-                    Id = e.Id,
-                    ExerciseName = e.ExerciseName
-                }).ToList(),
+                Exercises = exerciseViewModels
             };
 
             return View(viewModel);
@@ -93,16 +100,19 @@ namespace Exercitium.Controllers
 
             if (ModelState.IsValid)
             {
+
                 var workout = new Workout
                 {
                     Type = viewModel.Type,
                     DateTime = viewModel.DateTime,
-                    UserId = userId.Id
+                    UserId = userId.Id,
+                    WorkoutExercises = new List<WorkoutExercise>()
                 };
 
+                var selectedExercises = viewModel.Exercises.Where(e => e.IsSelected).ToList();
                 workout.WorkoutExercises = new List<WorkoutExercise>();
 
-                foreach (var exercise in viewModel.Exercises)
+                foreach (var exercise in selectedExercises)
                 {
                     var exercises = await _context.Exercises.FindAsync(exercise.Id);
                     if (exercise != null)

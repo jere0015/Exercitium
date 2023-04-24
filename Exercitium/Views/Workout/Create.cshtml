@@ -21,6 +21,8 @@
         {
             <li>
                 @Html.HiddenFor(m => m.Exercises[i].IsSelected)
+                @Html.HiddenFor(model => model.Exercises[i].Id)
+                @Html.HiddenFor(model => model.Exercises[i].ExerciseName)
                 <input type="checkbox" asp-for="Exercises[i].IsSelected" name="Exercises[@i].IsSelected" id="exercise_@i" data-exercise-id="@i" data-exercise-name="@Model.Exercises[i].ExerciseName" />
                 <label for="exercise_@i" asp-for="Exercises[i].IsSelected">@Model.Exercises[i].ExerciseName</label>
             </li>
@@ -55,6 +57,7 @@
                 var exerciseName = $(this).data('exercise-name');
 
                 if ($(this).is(':checked')) {
+                    $('input[name="Exercises[' + exerciseId + '].IsSelected"]').val(true);
                     var exerciseRow = $('#selectedExercisesTable tbody').find('tr[data-exercise-id="' + exerciseId + '"]');
                     if (exerciseRow.length === 0) {
                         // Add exercise to the table if it doesn't exist
@@ -70,6 +73,8 @@
                         tableBody.append(row);
                     }
                 } else {
+                    // Set IsSelected value to false
+                    $('input[name="Exercises[' + exerciseId + '].IsSelected"]').val(false);
                     // Remove exercise from the table
                     var tableBody = $('#selectedExercisesTable tbody');
                     tableBody.find('tr[data-exercise-id="' + exerciseId + '"]').remove();

@@ -7,5 +7,18 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h1>Welcome, @ViewBag.UserName</h1>
+    <h1>Welcome to Exercitium, @ViewBag.UserName</h1>
+    <br />
+    <p>Your new favourite fitness logger site is here. Track your fitness journey by creating workouts and add your desired exercises to them.</p>
+    <br />
+    <h3>Get started by creating a new workout</h3>
+    <a asp-controller="Workout" asp-action="Index" class="btn btn-primary">Create New workout</a>
+}
+
+else
+{
+    <h1>Welcome, guest</h1>
+    <p>Sign in or register to track your fitness journey</p>
+    <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-primary">Register</a>
+    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
 }

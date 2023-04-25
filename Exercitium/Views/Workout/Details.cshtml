@@ -1,0 +1,44 @@
+﻿@using Exercitium.ViewModels
+@model WorkoutDetailsViewModel
+
+<h1>Details</h1>
+
+<h1>@Model.Id</h1>
+<p><strong>Date:</strong> @Model.DateTime.ToShortDateString()</p>
+<p><strong>Type:</strong> @Model.Type</p>
+
+<h2>Exercises</h2>
+
+@if (Model?.Exercises?.Count != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Exercise</th>
+                <th>Sets</th>
+                <th>Reps</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var workoutExercise in Model.Exercises)
+            {
+                <tr>
+                    <td>@workoutExercise.ExerciseName</td>
+                    <td>@workoutExercise.Sets</td>
+                    <td>@workoutExercise.Reps</td>
+                    <td>@workoutExercise.Weight</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No exercises found for this workout.</p>
+}
+<p>
+    <a asp-action="Index">Back to List</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+</p>

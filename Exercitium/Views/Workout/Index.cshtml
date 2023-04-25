@@ -1,9 +1,9 @@
-﻿@model List<Exercise>
+﻿@model List<Workout>
 
-<h1>Exercises</h1>
+<h1>Workout page</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New exercise</a>
+    <a asp-action="Create" class="btn btn-primary">Create New workout</a>
 </p>
 
 @if (Model == null)
@@ -16,7 +16,9 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Exercise</th>
+                <th>Workout Id</th>
+                <th>Date</th>
+                <th>Type</th>
                 <th></th>
             </tr>
         </thead>
@@ -24,8 +26,11 @@ else
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.ExerciseName</td>
+                    <td>@item.Id</td>
+                    <td>@item.DateTime.ToShortDateString()</td>
+                    <td>@item.Type</td>
                     <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                         <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>

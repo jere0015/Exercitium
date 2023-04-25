@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string ExerciseName { get; set; } = string.Empty;
-        public List<Workout>? Workouts { get; set; }
+        public ICollection<WorkoutExercise>? WorkoutExercises { get; set; }
     }
 }

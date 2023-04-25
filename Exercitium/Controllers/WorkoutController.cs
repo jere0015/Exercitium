@@ -1,4 +1,5 @@
-﻿using Exercitium.Data;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Exercitium.Data;
 using Exercitium.Models;
 using Exercitium.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -14,11 +15,13 @@ namespace Exercitium.Controllers
     {
         private readonly ExercitiumContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly INotyfService _notyf;
 
-        public WorkoutController(ExercitiumContext context, UserManager<User> userManager)
+        public WorkoutController(ExercitiumContext context, UserManager<User> userManager, INotyfService notyf)
         {
             _context = context;
             _userManager = userManager;
+            _notyf = notyf;
         }
 
         public async Task<IActionResult> Index()
@@ -130,7 +133,7 @@ namespace Exercitium.Controllers
                 }
                 _context.Workouts.Add(workout);
                 await _context.SaveChangesAsync();
-
+                _notyf.Success("Workout has been created");
                 return RedirectToAction("Index", "Workout");
             }
             viewModel.Exercises = _context.Exercises.Select(e => new ExerciseViewModel
@@ -138,6 +141,7 @@ namespace Exercitium.Controllers
                 Id = e.Id,
                 ExerciseName = e.ExerciseName
             }).ToList();
+            _notyf.Error("Failed for some reasons");
             return View(viewModel);
         }
 
@@ -241,6 +245,7 @@ namespace Exercitium.Controllers
                     }
 
                     _context.Update(workout);
+                    _notyf.Success("Workout is now updated");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -309,6 +314,7 @@ namespace Exercitium.Controllers
             // Remove workout
             _context.Workouts.Remove(workout);
             await _context.SaveChangesAsync();
+            _notyf.Success("Workout has been deleted");
             return RedirectToAction("Index");
         }
     }

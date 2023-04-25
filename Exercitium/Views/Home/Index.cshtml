@@ -7,18 +7,34 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h1>Welcome to Exercitium, @ViewBag.UserName</h1>
-    <br />
-    <p>Your new favourite fitness logger site is here. Track your fitness journey by creating workouts and add your desired exercises to them.</p>
-    <br />
-    <h3>Get started by creating a new workout</h3>
-    <a asp-controller="Workout" asp-action="Index" class="btn btn-primary">Create New workout</a>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Welcome, @ViewBag.UserName</h1>
+                <p class="lead text-body-secondary">Your new favourite fitness logger site is here. Track your fitness journey by creating workouts and add your desired exercises to them.</p>
+                <p class="lead text-body-secondary">Get started by creating a new workout</p>
+                <p>
+                    <a asp-controller="Workout" asp-action="Index" class="btn btn-primary my-2">Create New workout</a>
+                    <a href="#" class="btn btn-secondary my-2">View profile</a>
+                </p>
+            </div>
+        </div>
+    </section>
 }
 
 else
 {
-    <h1>Welcome, guest</h1>
-    <p>Sign in or register to track your fitness journey</p>
-    <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-primary">Register</a>
-    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light">Welcome, guest</h1>
+                <p class="lead text-body-secondary">Your new favourite fitness logger site is here. Track your fitness journey by creating workouts and add your desired exercises to them.</p>
+                <p class="lead text-body-secondary">Sign in or register to track your fitness journey</p>
+                <p>
+                    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-primary my-2">Login</a>
+                    <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-secondary my-2">Register</a>
+                </p>
+            </div>
+        </div>
+    </section>
 }

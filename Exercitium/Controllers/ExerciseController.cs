@@ -1,18 +1,24 @@
-﻿using Exercitium.Data;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Exercitium.Data;
 using Exercitium.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Exercitium.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class ExerciseController : Controller
     {
         private readonly ExercitiumContext _dbContext;
+        private readonly INotyfService _notyf;
 
-        public ExerciseController(ExercitiumContext exercitiumContext)
+        public ExerciseController(ExercitiumContext exercitiumContext, INotyfService notyf)
         {
             _dbContext = exercitiumContext;
+            _notyf = notyf;
         }
         public ActionResult Index()
         {
@@ -33,8 +39,10 @@ namespace Exercitium.Controllers
             {
                 _dbContext.Exercises.Add(exercise);
                 _dbContext.SaveChanges();
+                _notyf.Success("Exercise was created");
                 return RedirectToAction("Index");
             }
+            _notyf.Error("Failed for some reasons");
             return View(exercise);
         }
 
@@ -61,8 +69,10 @@ namespace Exercitium.Controllers
             {
                 _dbContext.Entry(exercise).State = EntityState.Modified;
                 _dbContext.SaveChanges();
+                _notyf.Success("Exercise has been updated");
                 return RedirectToAction("Index");
             }
+            _notyf.Error("Failed for some reasons");
             return View(exercise);
         }
 
@@ -88,6 +98,7 @@ namespace Exercitium.Controllers
 
             _dbContext.Exercises.Remove(exerciseToDelete);
             _dbContext.SaveChanges();
+            _notyf.Success("Exercise has been deleted");
             return RedirectToAction("Index");
         }
     }

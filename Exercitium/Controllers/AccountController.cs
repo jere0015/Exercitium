@@ -1,4 +1,5 @@
-﻿using Exercitium.Data;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Exercitium.Data;
 using Exercitium.Models;
 using Exercitium.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -11,12 +12,14 @@ namespace Exercitium.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ExercitiumContext _context;
+        private readonly INotyfService _notyf;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ExercitiumContext context)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ExercitiumContext context, INotyfService notyf)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _notyf = notyf;
         }
 
         public IActionResult Login()
@@ -83,7 +86,7 @@ namespace Exercitium.Controllers
 
             if (newUserResponse.Succeeded)
                 await _userManager.AddToRoleAsync(newUser, UserRoles.User);
-
+            _notyf.Success("Welcome to Exercitium!");
             return RedirectToAction("Index", "Home");
         }
 
@@ -92,6 +95,19 @@ namespace Exercitium.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult CheckUser()
+        {
+            // Retrieve list of users with their roles
+            var usersWithRoles = _userManager.Users.Select(u => new UserRolesViewModel
+            {
+                UserId = u.Id,
+                Email = u.Email,
+                Roles = _userManager.GetRolesAsync(u).Result.ToList()
+            }).ToList();
+
+            return View(usersWithRoles);
         }
     }
 }

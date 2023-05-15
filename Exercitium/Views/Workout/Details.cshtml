@@ -38,7 +38,7 @@ else
     <p>No exercises found for this workout.</p>
 }
 <p>
-    <a asp-action="Index">Back to List</a> |
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    <a asp-action="Index" class="btn btn-link"><i class="fa-regular fa-circle-left"></i></a> |
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-link"><i class="fas fa-edit"></i></a> |
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-link"><i class="fas fa-trash"></i></a>
 </p>

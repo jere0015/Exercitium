@@ -9,7 +9,7 @@ using System.Data;
 
 namespace Exercitium.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public class ExerciseController : Controller
     {
         private readonly ExercitiumContext _dbContext;

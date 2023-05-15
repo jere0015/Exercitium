@@ -23,7 +23,7 @@
                 @Html.HiddenFor(m => m.Exercises[i].IsSelected)
                 @Html.HiddenFor(model => model.Exercises[i].Id)
                 @Html.HiddenFor(model => model.Exercises[i].ExerciseName)
-                <input type="checkbox" asp-for="Exercises[i].IsSelected" name="SelectedExercises[@Model.Exercises[i].Id].IsSelected" id="exercise_@i" data-exercise-id="@Model.Exercises[i].Id" data-exercise-name="@Model.Exercises[i].ExerciseName" />
+                <input type="checkbox" asp-for="Exercises[i].IsSelected" name="Exercises[@i].IsSelected" id="exercise_@i" data-exercise-id="@i" data-exercise-name="@Model.Exercises[i].ExerciseName" />
                 <label for="exercise_@i" asp-for="Exercises[i].IsSelected">@Model.Exercises[i].ExerciseName</label>
             </li>
         }
@@ -65,10 +65,9 @@
                         var exerciseIndex = tableBody.children('tr').length;
                         var row = '<tr data-exercise-id="' + exerciseId + '">'
                             + '<td>' + exerciseName + '</td>'
-                            + '<td><input type="hidden" name="SelectedExercises[' + exerciseIndex + '].Id" value="' + exerciseId + '" />'
-                            + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Sets" /></td>'
-                            + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Reps" /></td>'
-                            + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Weight" /></td>'
+                            + '<td><input type="number" name="Exercises[' + exerciseIndex + '].Sets" /></td>'
+                            + '<td><input type="number" name="Exercises[' + exerciseIndex + '].Reps" /></td>'
+                            + '<td><input type="number" name="Exercises[' + exerciseIndex + '].Weight" /></td>'
                             + '<td><a href="#" class="deleteExercise"><i class="fas fa-trash"></i></a></td>'
                             + '</tr>';
                         tableBody.append(row);

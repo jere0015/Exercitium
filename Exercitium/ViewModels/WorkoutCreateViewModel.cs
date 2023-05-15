@@ -13,5 +13,6 @@ namespace Exercitium.ViewModels
         [DataType(DataType.Date)]
         public DateTime DateTime { get; set; }
         public List<ExerciseViewModel> Exercises { get; set; }
+        public List<SelectedExerciseViewModel> SelectedExercises { get; set; }
     }
 }

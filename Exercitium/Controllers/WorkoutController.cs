@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Exercitium.Controllers
 {
@@ -112,21 +113,22 @@ namespace Exercitium.Controllers
                     WorkoutExercises = new List<WorkoutExercise>()
                 };
 
-                var selectedExercises = viewModel.Exercises.Where(e => e.IsSelected).ToList();
+                var selectedExercises = viewModel.SelectedExercises;
                 workout.WorkoutExercises = new List<WorkoutExercise>();
 
-                foreach (var exercise in selectedExercises)
+                for (int i = 0; i < selectedExercises.Count; i++)
                 {
-                    var exercises = await _context.Exercises.FindAsync(exercise.Id);
-                    if (exercise != null)
+                    var selectedExercise = selectedExercises[i];
+                    var exercises = await _context.Exercises.FindAsync(selectedExercise.ExerciseId);
+                    if (exercises != null)
                     {
                         var workoutExercise = new WorkoutExercise
                         {
                             Workout = workout,
                             Exercise = exercises,
-                            Sets = exercise.Sets,
-                            Reps = exercise.Reps,
-                            Weight = exercise.Weight
+                            Sets = selectedExercise.Sets,
+                            Reps = selectedExercise.Reps,
+                            Weight = selectedExercise.Weight
                         };
                         workout.WorkoutExercises.Add(workoutExercise);
                     }
@@ -260,7 +262,7 @@ namespace Exercitium.Controllers
                     {
                         throw;
                     }
-                }                
+                }
                 return RedirectToAction("Index");
             }
 
@@ -316,6 +318,72 @@ namespace Exercitium.Controllers
             await _context.SaveChangesAsync();
             _notyf.Success("Workout has been deleted");
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult CreateTest()
+        {
+            var exercises = _context.Exercises.ToList();
+
+            var exerciseViewModels = exercises.Select(e => new ExerciseViewModelTest
+            {
+                Id = e.Id,
+                ExerciseName = e.ExerciseName,
+                IsChecked = false
+            }).ToList();
+
+            var viewModel = new WorkoutViewModelTest
+            {
+                Exercises = exerciseViewModels
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateTest(WorkoutViewModelTest model)
+        {
+            User? userId = await _userManager.GetUserAsync(User);
+
+            // Check model state
+            if (ModelState.IsValid)
+            {
+                // Create new workout and set properties
+                var workout = new Workout
+                {
+                    Type = model.Type,
+                    DateTime = model.Date,
+                    UserId = userId.Id,
+                    WorkoutExercises = new List<WorkoutExercise>()
+                };
+
+                // Loop through all exercises and add to database with corresponding sets, reps, and weights
+                foreach (var exercise in model.Exercises)
+                {
+                    if (exercise.IsChecked)
+                    {
+                        if (model != null)
+                        {
+                            var workoutExercise = new WorkoutExercise
+                            {
+                                WorkoutId = workout.Id,
+                                ExerciseId = exercise.Id
+                            };
+
+                            _context.WorkoutExercises.Add(workoutExercise);
+                            await _context.SaveChangesAsync();
+                        }
+
+                    }
+                }
+
+                // Redirect to index page
+                return RedirectToAction("Index", "Workout");
+            }
+
+            // If model state is not valid, return view with model
+            return View(model);
         }
     }
 }

@@ -1,20 +1,53 @@
-﻿@using Exercitium.ViewModels;
-@model List<UserRolesViewModel>
+﻿@using Microsoft.AspNetCore.Identity
+@using Exercitium.ViewModels;
+@model List<UserRoleViewModel>
 
-<h1>User Roles</h1>
+@{
+    ViewBag.Title = "Manage Roles";
+}
+
+<h2>Manage Roles</h2>
 
 <table class="table">
-    <tr>
-        <th>User Id</th>
-        <th>User Name</th>
-        <th>Roles</th>
-    </tr>
-    @foreach (var user in Model)
-    {
+    <thead>
         <tr>
-            <td>@user.UserId</td>
-            <td>@user.Email</td>
-            <td>@string.Join(", ", user.Roles)</td>
+            <th>User ID</th>
+            <th>E-mail</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Role</th>
+            <th>Change Role</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.Email</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                        @if (@user.RoleName != null)
+                        {
+                            <td>@string.Join(", ", user.RoleName)</td>
+                        }
+                        else
+                        {
+                            <td>No Roles</td>
+                        }
+                    <td>
+                        <form asp-controller="Account" asp-action="CheckUser" method="post">
+                            <input type="hidden" name="userId" value="@user.UserId" />
+                            <select name="roleName">
+                            @foreach (var role in ViewBag.Roles ?? new List<string>())
+                            {
+                                        <option value="@role">@role</option>
+                            }
+                            </select>
+                            <button type="submit">Change Role</button>
+                        </form>
+                    </td>
+                </tr>
+        }
+    </tbody>
 </table>

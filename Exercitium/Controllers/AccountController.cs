@@ -4,6 +4,7 @@ using Exercitium.Models;
 using Exercitium.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Exercitium.Controllers
 {
@@ -97,17 +98,25 @@ namespace Exercitium.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult CheckUser()
+        public async Task<IActionResult> CheckUser()
         {
-            // Retrieve list of users with their roles
-            var usersWithRoles = _userManager.Users.Select(u => new UserRolesViewModel
-            {
-                UserId = u.Id,
-                Email = u.Email,
-                Roles = _userManager.GetRolesAsync(u).Result.ToList()
-            }).ToList();
+            var viewModel = new List<UserRoleViewModel>();
 
-            return View(usersWithRoles);
+            foreach (var user in _userManager.Users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                var userWithRole = new UserRoleViewModel
+                {
+                    UserId = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    RoleName = roles.ToList()
+                };
+                viewModel.Add(userWithRole);
+            }
+
+            return View(viewModel);
         }
     }
 }

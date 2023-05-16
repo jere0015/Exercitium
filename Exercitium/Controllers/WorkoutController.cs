@@ -138,6 +138,18 @@ namespace Exercitium.Controllers
                 _notyf.Success("Workout has been created");
                 return RedirectToAction("Index", "Workout");
             }
+
+            // Log ModelState errors for debugging
+            foreach (var modelStateEntry in ModelState)
+            {
+                var propertyName = modelStateEntry.Key;
+                var errors = modelStateEntry.Value.Errors;
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"ModelState Error for property '{propertyName}': {error.ErrorMessage}");
+                }
+            }
+
             viewModel.Exercises = _context.Exercises.Select(e => new ExerciseViewModel
             {
                 Id = e.Id,

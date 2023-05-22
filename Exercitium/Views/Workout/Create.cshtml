@@ -55,6 +55,93 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            var selectedExercises = []; // Array to store selected exercises
+
+            // Handle exercise checkbox change event
+            $('#availableExercises').on('change', 'input[type="checkbox"]', function () {
+                var exerciseId = $(this).data('exercise-id');
+                var exerciseName = $(this).data('exercise-name');
+
+                if ($(this).is(':checked')) {
+                    $('input[name="Exercises[' + exerciseId + '].IsSelected"]').val(true);
+
+                    // Add exercise to the selected exercises array
+                    var exercise = {
+                        exerciseId: exerciseId,
+                        exerciseName: exerciseName
+                    };
+                    selectedExercises.push(exercise);
+
+                    // Update the table with selected exercises
+                    updateSelectedExercisesTable();
+                } else {
+                    // Set IsSelected value to false
+                    $('input[name="Exercises[' + exerciseId + '].IsSelected"]').val(false);
+
+                    // Remove exercise from the selected exercises array
+                    selectedExercises = selectedExercises.filter(function (exercise) {
+                        return exercise.exerciseId !== exerciseId;
+                    });
+
+                    // Update the table with selected exercises
+                    updateSelectedExercisesTable();
+                }
+            });
+
+            // Function to update the selected exercises table
+            function updateSelectedExercisesTable() {
+                var tableBody = $('#selectedExercisesTable tbody');
+                tableBody.empty(); // Clear the table
+
+                // Iterate through the selected exercises array and add rows to the table
+                for (var i = 0; i < selectedExercises.length; i++) {
+                    var exercise = selectedExercises[i];
+                    var exerciseId = exercise.exerciseId;
+                    var exerciseName = exercise.exerciseName;
+                    var exerciseIndex = i;
+
+                    var row = '<tr data-exercise-id="' + exerciseId + '">'
+                        + '<td>' + exerciseName + '</td>'
+                        + '<td><input type="hidden" name="SelectedExercises.Index" value="' + exerciseIndex + '" />'
+                        + '<input type="hidden" name="SelectedExercises[' + exerciseIndex + '].ExerciseId" value="' + exerciseId + '" />'
+                        + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Sets" /></td>'
+                        + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Reps" /></td>'
+                        + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Weight" /></td>'
+                        + '<td><a href="#" class="deleteExercise"><i class="fas fa-trash"></i></a></td>'
+                        + '</tr>';
+                    tableBody.append(row);
+                }
+            }
+
+            // Handle delete exercise click event
+            $('#selectedExercisesTable').on('click', '.deleteExercise', function (e) {
+                e.preventDefault();
+                var row = $(this).closest('tr');
+                var exerciseId = row.data('exercise-id');
+                var exerciseCheckbox = $('#exercise_' + exerciseId);
+                exerciseCheckbox.prop('checked', false); // Uncheck the checkbox
+
+                // Remove exercise from the selected exercises array
+                selectedExercises = selectedExercises.filter(function (exercise) {
+                    return exercise.exerciseId !== exerciseId;
+                });
+
+                // Update the table with selected exercises
+                updateSelectedExercisesTable();
+            });
+
+            // Handle form submission event
+            $('form').submit(function () {
+                // Set IsSelected to false for all unchecked exercises
+                $('input[type="checkbox"][name^="Exercises"][name$=".IsSelected"]').not(':checked').val(false);
+                return true;
+            });
+        });
+    </script>
+
+
+    @*<script>
+        $(document).ready(function () {
             // Handle exercise checkbox change event
             $('#availableExercises').on('change', 'input[type="checkbox"]', function () {
                 var exerciseId = $(this).data('exercise-id');
@@ -105,6 +192,6 @@
             });
         });
 
-    </script>
+    </script>*@
 }
 

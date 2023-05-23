@@ -22,12 +22,8 @@
             var exercise = Model.Exercises[i];
             <li>
                 @Html.HiddenFor(model => Model.Exercises[i].Id)
-                <input type="hidden" name="Exercises[@i].ExerciseName" value="@exercise.ExerciseName" />
-                <input type="hidden" name="Exercises[@i].Sets" value="@exercise.Sets" />
-                <input type="hidden" name="Exercises[@i].Reps" value="@exercise.Reps" />
-                <input type="hidden" name="Exercises[@i].Weight" value="@exercise.Weight" />
                 <input type="checkbox" name="SelectedExercises[@i].ExerciseId" value="@exercise.Id" id="exercise_@i" data-exercise-id="@exercise.Id" data-exercise-name="@exercise.ExerciseName" />
-                <label for="exercise_@i" asp-for="SelectedExercises[i].ExerciseId">@exercise.ExerciseName</label>
+                <label for="exercise_@i">@exercise.ExerciseName</label>
             </li>
         }
     </ul>
@@ -63,7 +59,6 @@
                 var exerciseName = $(this).data('exercise-name');
 
                 if ($(this).is(':checked')) {
-                    $('input[name="Exercises[' + exerciseId + '].IsSelected"]').val(true);
 
                     // Add exercise to the selected exercises array
                     var exercise = {
@@ -73,20 +68,17 @@
                     selectedExercises.push(exercise);
 
                     // Update the table with selected exercises
-                    updateSelectedExercisesTable();
+                    // updateSelectedExercisesTable();
                 } else {
-                    // Set IsSelected value to false
-                    $('input[name="Exercises[' + exerciseId + '].IsSelected"]').val(false);
 
                     // Remove exercise from the selected exercises array
                     selectedExercises = selectedExercises.filter(function (exercise) {
                         return exercise.exerciseId !== exerciseId;
                     });
                     console.log('hello' + selectedExercises)
-
+                }
                     // Update the table with selected exercises
                     updateSelectedExercisesTable();
-                }
             });
 
             // Function to update the selected exercises table
@@ -103,8 +95,8 @@
 
                     var row = '<tr data-exercise-id="' + exerciseId + '">'
                         + '<td>' + exerciseName + '</td>'
-                        + '<td><input type="hidden" name="SelectedExercises.Index" value="' + exerciseIndex + '" />'
-                        + '<input type="hidden" name="SelectedExercises[' + exerciseIndex + '].ExerciseId" value="' + exerciseId + '" />'
+                        + '<td><input type="hidden" name="SelectedExercises.Index" value="' + exerciseIndex + '" /></td>'
+                        + '<input type="hidden" name="SelectedExercises[' + exerciseIndex + '].ExerciseId" value="' + exerciseId + '" /></td>'
                         + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Sets" /></td>'
                         + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Reps" /></td>'
                         + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Weight" /></td>'
@@ -136,14 +128,20 @@
 
             // Handle form submission event
             $('form').submit(function () {
-                // Set IsSelected to false for all unchecked exercises
-                $('input[type="checkbox"][name^="Exercises"][name$=".IsSelected"]').not(':checked').val(false);
+                // Update the hidden input names to ensure proper indexing
+                //$('#selectedExercisesTable tbody tr').each(function (index, row) {
+                //    $(row).find('input[name^="SelectedExercises"]').each(function () {
+                //        var currentName = $(this).attr('name');
+                //        var newName = currentName.replace('SelectedExercises', 'SelectedExercises[' + index + ']');
+                //        $(this).attr('name', newName);
+                //    });
+                //});
+                //console.log(selectedExercises)
                 return true;
             });
         });
     </script>
-
-
+}
     @*<script>
         $(document).ready(function () {
             // Handle exercise checkbox change event
@@ -197,5 +195,4 @@
         });
 
     </script>*@
-}
 

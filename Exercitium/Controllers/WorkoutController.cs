@@ -84,8 +84,7 @@ namespace Exercitium.Controllers
                 ExerciseName = e.ExerciseName,
                 Sets = 0,
                 Reps = 0,
-                Weight = 0,
-                IsSelected = false
+                Weight = 0
             }).ToList();
 
             var viewModel = new WorkoutCreateViewModel

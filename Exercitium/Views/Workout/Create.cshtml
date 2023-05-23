@@ -82,6 +82,7 @@
                     selectedExercises = selectedExercises.filter(function (exercise) {
                         return exercise.exerciseId !== exerciseId;
                     });
+                    console.log('hello' + selectedExercises)
 
                     // Update the table with selected exercises
                     updateSelectedExercisesTable();
@@ -110,6 +111,9 @@
                         + '<td><a href="#" class="deleteExercise"><i class="fas fa-trash"></i></a></td>'
                         + '</tr>';
                     tableBody.append(row);
+
+                    console.log('clicked')
+                    console.log(selectedExercises)
                 }
             }
 

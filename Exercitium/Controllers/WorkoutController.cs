@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Exercitium.Controllers
 {
@@ -115,19 +114,18 @@ namespace Exercitium.Controllers
                 var selectedExercises = viewModel.SelectedExercises;
                 workout.WorkoutExercises = new List<WorkoutExercise>();
 
-                for (int i = 0; i < selectedExercises.Count; i++)
+                foreach (SelectedExerciseViewModel exercise in selectedExercises)
                 {
-                    var selectedExercise = selectedExercises[i];
-                    var exercises = await _context.Exercises.FindAsync(selectedExercise.ExerciseId);
+                    var exercises = await _context.Exercises.FindAsync(exercise.Id);
                     if (exercises != null)
                     {
                         var workoutExercise = new WorkoutExercise
                         {
                             Workout = workout,
                             Exercise = exercises,
-                            Sets = selectedExercise.Sets,
-                            Reps = selectedExercise.Reps,
-                            Weight = selectedExercise.Weight
+                            Sets = exercise.Sets,
+                            Reps = exercise.Reps,
+                            Weight = exercise.Weight
                         };
                         workout.WorkoutExercises.Add(workoutExercise);
                     }

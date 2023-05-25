@@ -156,5 +156,9 @@ namespace Exercitium.Controllers
             return RedirectToAction("CheckUser");
         }
 
+        public IActionResult Profile()
+        {
+            return View();
+        }
     }
 }

@@ -49,7 +49,6 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
-
                     </ul>
                     <ul>
                         <li class="dropdown">
@@ -75,46 +74,9 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                                 }
-
                             </div>
                         </li>
                     </ul>
-                    @*<div>
-                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="Images/anonymous-avatar-icon.png" alt="mdo" width="32" height="32" class="rounded-circle">
-                        </a>
-                        <ul class="dropdown-menu text-small">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Profile</a>
-                                </li>
-                                @if (User.IsInRole("secret"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CheckUser">Roles</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Exercise" asp-action="Index">Exercise</a>
-                                    </li>
-                                }
-                                <li class="nav-item">
-                                    <form asp-area="" asp-controller="Account" asp-action="Logout">
-                                        <button class="btn btn-outline-danger">Logout</button>
-                                    </form>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                                </li>
-                            }
-                        </ul>
-                    </div>*@
                 </div>
             </div>
         </nav>

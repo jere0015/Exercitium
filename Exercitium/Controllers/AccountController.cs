@@ -14,13 +14,15 @@ namespace Exercitium.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ExercitiumContext _context;
         private readonly INotyfService _notyf;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ExercitiumContext context, INotyfService notyf)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, ExercitiumContext context, INotyfService notyf, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
             _notyf = notyf;
+            _roleManager = roleManager;
         }
 
         public IActionResult Login()
@@ -100,7 +102,12 @@ namespace Exercitium.Controllers
 
         public async Task<IActionResult> CheckUser()
         {
-            var viewModel = new List<UserRoleViewModel>();
+
+            var viewModel = new CheckUserViewModel
+            {
+                Users = new List<UserRoleViewModel>(),
+                RoleManager = _roleManager
+            };
 
             foreach (var user in _userManager.Users)
             {
@@ -113,10 +120,41 @@ namespace Exercitium.Controllers
                     LastName = user.LastName,
                     RoleName = roles.ToList()
                 };
-                viewModel.Add(userWithRole);
+                viewModel.Users.Add(userWithRole);
             }
 
             return View(viewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeRole(string userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            var result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Failed to remove current roles from the user.");
+                _notyf.Error("Failed to remove current roles from the user");
+                return RedirectToAction("CheckUser");
+            }
+
+            result = await _userManager.AddToRoleAsync(user, roleName);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, "Failed to assign the new role to the user.");
+                _notyf.Error("Failed to remove current roles from the user");
+                return RedirectToAction("CheckUser");
+            }
+
+            _notyf.Success("Role has been changed successfully");
+            return RedirectToAction("CheckUser");
+        }
+
     }
 }

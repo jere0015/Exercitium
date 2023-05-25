@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject RoleManager<IdentityRole> RoleManager
+@model string
+
+<h2>Create New Role</h2>
+
+@using (Html.BeginForm("CreateRole", "Admin", FormMethod.Post))
+{
+    <div>
+        <label for="roleName">Role Name:</label>
+        <input type="text" id="roleName" name="roleName" />
+    </div>
+
+    <button type="submit">Create Role</button>
+}

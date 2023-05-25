@@ -83,8 +83,7 @@ namespace Exercitium.Controllers
                 ExerciseName = e.ExerciseName,
                 Sets = 0,
                 Reps = 0,
-                Weight = 0,
-                IsSelected = false
+                Weight = 0
             }).ToList();
 
             var viewModel = new WorkoutCreateViewModel
@@ -112,13 +111,13 @@ namespace Exercitium.Controllers
                     WorkoutExercises = new List<WorkoutExercise>()
                 };
 
-                var selectedExercises = viewModel.Exercises.Where(e => e.IsSelected).ToList();
+                var selectedExercises = viewModel.SelectedExercises;
                 workout.WorkoutExercises = new List<WorkoutExercise>();
 
-                foreach (var exercise in selectedExercises)
+                foreach (SelectedExerciseViewModel exercise in selectedExercises)
                 {
                     var exercises = await _context.Exercises.FindAsync(exercise.Id);
-                    if (exercise != null)
+                    if (exercises != null)
                     {
                         var workoutExercise = new WorkoutExercise
                         {
@@ -136,6 +135,18 @@ namespace Exercitium.Controllers
                 _notyf.Success("Workout has been created");
                 return RedirectToAction("Index", "Workout");
             }
+
+            // Log ModelState errors for debugging
+            foreach (var modelStateEntry in ModelState)
+            {
+                var propertyName = modelStateEntry.Key;
+                var errors = modelStateEntry.Value.Errors;
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"ModelState Error for property '{propertyName}': {error.ErrorMessage}");
+                }
+            }
+
             viewModel.Exercises = _context.Exercises.Select(e => new ExerciseViewModel
             {
                 Id = e.Id,
@@ -260,7 +271,7 @@ namespace Exercitium.Controllers
                     {
                         throw;
                     }
-                }                
+                }
                 return RedirectToAction("Index");
             }
 

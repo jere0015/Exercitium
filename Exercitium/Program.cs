@@ -7,11 +7,14 @@ using AspNetCoreHero.ToastNotification;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 builder.Services.AddDbContext<ExercitiumContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ExercitiumContext") ?? throw new InvalidOperationException("Connection string 'ExercitiumContext' not found.")));
 
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ExercitiumContext>();
+
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();

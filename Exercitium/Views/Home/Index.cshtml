@@ -1,40 +1,65 @@
-﻿@model User
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
+
+@model User
 
 @{
     ViewData["Title"] = "Home Page";
 }
-
-
-@if (User.Identity.IsAuthenticated)
-{
-    <section class="py-5 text-center container">
-        <div class="row py-lg-5">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Welcome, @ViewBag.UserName</h1>
-                <p class="lead text-body-secondary">Your new favourite fitness logger site is here. Track your fitness journey by creating workouts and add your desired exercises to them.</p>
-                <p class="lead text-body-secondary">Get started by creating a new workout</p>
-                <p>
-                    <a asp-controller="Workout" asp-action="Index" class="btn btn-primary my-2">Create New workout</a>
-                    <a asp-controller="Account" asp-action="Profile" class="btn btn-secondary my-2">View profile</a>
-                </p>
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+            <div class="col-10 col-sm-8 col-lg-6">
+                <img src="~/Images/ExercitiumLogo.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+            </div>
+            <div class="col-lg-6">
+                @if (User.Identity.IsAuthenticated)
+                {
+                <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Welcome to Exercitium, @UserManager.GetUserAsync(User).Result.FirstName</h1>
+                    <p class="lead">Your new favourite fitness logger site is here. Track your fitness journey by creating workouts and add your desired exercises to them. Sign in or register to begin tracking your fitness journey.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <a asp-controller="Workout" asp-action="Index" type="button" class="btn btn-primary btn-lg px-4 me-md-2">Create new workout</a>
+                        <a asp-controller="Account" asp-action="Profile" type="button" class="btn btn-outline-secondary btn-lg px-4">Profile</a>
+                    </div>
+                }
+                else
+                {
+                    <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Welcome to Exercitium, guest</h1>
+                    <p class="lead">Your new favourite fitness logger site is here. Track your fitness journey by creating workouts and add your desired exercises to them. Sign in or register to begin tracking your fitness journey.</p>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <a asp-controller="Account" asp-action="Login" type="button" class="btn btn-primary btn-lg px-4 me-md-2">Login</a>
+                        <a asp-controller="Account" asp-action="Register" type="button" class="btn btn-outline-secondary btn-lg px-4">Register</a>
+                    </div>
+                }
             </div>
         </div>
-    </section>
-}
+    </div>
 
-else
-{
-    <section class="py-5 text-center container">
-        <div class="row py-lg-5">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Welcome, guest</h1>
-                <p class="lead text-body-secondary">Your new favourite fitness logger site is here. Track your fitness journey by creating workouts and add your desired exercises to them.</p>
-                <p class="lead text-body-secondary">Sign in or register to track your fitness journey</p>
-                <p>
-                    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-primary my-2">Login</a>
-                    <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-secondary my-2">Register</a>
-                </p>
+    <div class="container my-5">
+        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+            <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+                <h1 class="display-4 fw-bold lh-1 text-body-emphasis">Create workouts</h1>
+                <p class="lead">Want to track your workout progress? Look no further! With Exercitium, you can choose whatever exercises you've performed, and add them to your workout along with the amount of sets, reps and weight for each exercise. Add a type and a date to your workouts for better organized workouts.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                    <a asp-controller="Workout" asp-action="Index" type="button" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Get started</a>
+                </div>
+            </div>
+            <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+                <img class="rounded-lg-3" src="~/Images/ExercitiumWorkout.png" alt="" width="720">
             </div>
         </div>
-    </section>
-}
+    </div>
+
+    <div class="container my-5">
+        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+            <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+                <img class="rounded-lg-3" src="~/Images/ExercitiumStatistics.png" alt="" width="720">
+            </div>
+            <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+                <h1 class="display-4 fw-bold lh-1 text-body-emphasis">Statistics</h1>
+                <p class="lead">It can be difficult to keep track of your progression, when just looking at your previous workouts. But that's what the statistics page is for! This way, you can easily keep track of your progression.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                    <a asp-controller="Statistics" asp-action="Index" type="button" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Get started</a>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,54 +1,58 @@
 ﻿@using Exercitium.ViewModels;
 @model WorkoutCreateViewModel
 
-<h2>Create Workout</h2>
 
-@using (Html.BeginForm("Create", "Workout"))
-{
-    <div class="form-group">
-        @Html.LabelFor(m => m.Type)
-        @Html.TextBoxFor(m => m.Type, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.DateTime)
-        @Html.TextBoxFor(m => m.DateTime, new { @class = "form-control", @type = "date" })
-    </div>
+<div class="row">
+    <div class="col-md-6 offset-md-3 d-flex flex-column align-items-left">
+        <h2>Create Workout</h2>
 
-    <h4>Exercises</h4>
-
-    <ul id="availableExercises">
-        @for (var i = 0; i < Model.Exercises.Count; i++)
+        @using (Html.BeginForm("Create", "Workout"))
         {
-            var exercise = Model.Exercises[i];
-            <li>
-                @Html.HiddenFor(model => Model.Exercises[i].Id)
-                <input type="checkbox" name="SelectedExercises[@i].ExerciseId" value="@exercise.Id" id="exercise_@i" data-exercise-id="@exercise.Id" data-exercise-name="@exercise.ExerciseName" />
-                <label for="exercise_@i">@exercise.ExerciseName</label>
-            </li>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Type)
+                @Html.TextBoxFor(m => m.Type, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.DateTime)
+                @Html.TextBoxFor(m => m.DateTime, new { @class = "form-control", @type = "date" })
+            </div>
+
+            <h4>Exercises</h4>
+
+            <ul id="availableExercises">
+                @for (var i = 0; i < Model.Exercises.Count; i++)
+                {
+                    var exercise = Model.Exercises[i];
+                    <li>
+                        @Html.HiddenFor(model => Model.Exercises[i].Id)
+                        <input type="checkbox" name="SelectedExercises[@i].ExerciseId" value="@exercise.Id" id="exercise_@i" data-exercise-id="@exercise.Id" data-exercise-name="@exercise.ExerciseName" />
+                        <label for="exercise_@i">@exercise.ExerciseName</label>
+                    </li>
+                }
+            </ul>
+
+            <h4>Selected Exercises:</h4>
+            <table id="selectedExercisesTable">
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th></th>
+                        <th></th>
+                        <th>Sets</th>
+                        <th>Reps</th>
+                        <th>Weight</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+
+            <button type="submit" class="btn btn-primary">Create</button>
         }
-    </ul>
-
-    <h4>Selected Exercises:</h4>
-    <table id="selectedExercisesTable">
-        <thead>
-            <tr>
-                <th>Exercise</th>
-                <th></th>
-                <th></th>
-                <th>Sets</th>
-                <th>Reps</th>
-                <th>Weight</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
-
-    <button type="submit" class="btn btn-primary">Create</button>
-}
-
+    </div>
+</div>
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -68,18 +72,15 @@
                     };
                     selectedExercises.push(exercise);
 
-                    // Update the table with selected exercises
-                    // updateSelectedExercisesTable();
                 } else {
 
                     // Remove exercise from the selected exercises array
                     selectedExercises = selectedExercises.filter(function (exercise) {
                         return exercise.exerciseId !== exerciseId;
                     });
-                    console.log('hello' + selectedExercises)
                 }
-                    // Update the table with selected exercises
-                    updateSelectedExercisesTable();
+                // Update the table with selected exercises
+                updateSelectedExercisesTable();
             });
 
             // Function to update the selected exercises table
@@ -104,9 +105,6 @@
                         + '<td><a href="#" class="deleteExercise"><i class="fas fa-trash"></i></a></td>'
                         + '</tr>';
                     tableBody.append(row);
-
-                    console.log('clicked')
-                    console.log(selectedExercises)
                 }
             }
 
@@ -129,71 +127,8 @@
 
             // Handle form submission event
             $('form').submit(function () {
-                // Update the hidden input names to ensure proper indexing
-                //$('#selectedExercisesTable tbody tr').each(function (index, row) {
-                //    $(row).find('input[name^="SelectedExercises"]').each(function () {
-                //        var currentName = $(this).attr('name');
-                //        var newName = currentName.replace('SelectedExercises', 'SelectedExercises[' + index + ']');
-                //        $(this).attr('name', newName);
-                //    });
-                //});
-                //console.log(selectedExercises)
                 return true;
             });
         });
     </script>
 }
-    @*<script>
-        $(document).ready(function () {
-            // Handle exercise checkbox change event
-            $('#availableExercises').on('change', 'input[type="checkbox"]', function () {
-                var exerciseId = $(this).data('exercise-id');
-                var exerciseName = $(this).data('exercise-name');
-
-                if ($(this).is(':checked')) {
-                    $('input[name="Exercises[' + exerciseId + '].IsSelected"]').val(true);
-                    var exerciseRow = $('#selectedExercisesTable tbody').find('tr[data-exercise-id="' + exerciseId + '"]');
-                    if (exerciseRow.length === 0) {
-                        // Add exercise to the table if it doesn't exist
-                        var tableBody = $('#selectedExercisesTable tbody');
-                        var exerciseIndex = tableBody.children('tr').Length;
-                        var row = '<tr data-exercise-id="' + exerciseId + '">'
-                            + '<td>' + exerciseName + '</td>'
-                            + '<td><input type="hidden" name="SelectedExercises.Index" value="' + exerciseIndex + '" />'
-                            + '<input type="hidden" name="SelectedExercises[' + exerciseIndex + '].ExerciseId" value="' + exerciseId + '" />'
-                            + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Sets" /></td>'
-                            + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Reps" /></td>'
-                            + '<td><input type="number" name="SelectedExercises[' + exerciseIndex + '].Weight" /></td>'
-                            + '<td><a href="#" class="deleteExercise"><i class="fas fa-trash"></i></a></td>'
-                            + '</tr>';
-                        tableBody.append(row);
-                    }
-                } else {
-                    // Set IsSelected value to false
-                    $('input[name="Exercises[' + exerciseId + '].IsSelected"]').val(false);
-                    // Remove exercise from the table
-                    var tableBody = $('#selectedExercisesTable tbody');
-                    tableBody.find('tr[data-exercise-id="' + exerciseId + '"]').remove();
-                }
-            });
-
-            // Handle delete exercise click event
-            $('#selectedExercisesTable').on('click', '.deleteExercise', function (e) {
-                e.preventDefault();
-                var row = $(this).closest('tr');
-                var exerciseId = row.data('exercise-id');
-                var exerciseCheckbox = $('#exercise_' + exerciseId);
-                exerciseCheckbox.prop('checked', false); // Uncheck the checkbox
-                row.remove();
-            });
-
-            // Handle form submission event
-            $('form').submit(function () {
-                // Set IsSelected to false for all unchecked exercises
-                $('input[type="checkbox"][name^="Exercises"][name$=".IsSelected"]').not(':checked').val(false);
-                return true;
-            });
-        });
-
-    </script>*@
-

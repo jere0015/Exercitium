@@ -1,0 +1,96 @@
+﻿@using Exercitium.ViewModels
+@model ExerciseStatisticsViewModel
+
+<h2>Exercise Statistics</h2>
+
+<div>
+    <label for="exerciseSelect">Select Exercise:</label>
+    <select id="exerciseSelect" onchange="updateChart(this.value)">
+        <option value="">@Model.DefaultExerciseName</option>
+        @foreach (var exercise in Model.Exercises.Skip(1))
+        {
+            <option value="@exercise.Id">@exercise.ExerciseName</option>
+        }
+    </select>
+</div>
+
+<canvas id="chart" width="400" height="200"></canvas>
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var selectedExerciseId = @Model.SelectedExerciseId;
+        var dates = @Html.Raw(Json.Serialize(Model.Dates));
+        var weights = @Html.Raw(Json.Serialize(Model.Weights));
+
+        var ctx = document.getElementById('chart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Weights',
+                    data: weights,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        time: {
+                            unit: 'day',
+                            tooltipFormat: 'DD-MM-YYYY',
+                            displayFormats: {
+                                day: 'DD-MM-YYYY'
+                            }
+                        },
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Weight'
+                        }
+                    }
+                }
+            }
+        });
+
+        function updateChart(exerciseId) {
+            // Update the selected exercise ID
+            selectedExerciseId = exerciseId;
+
+            // Make an AJAX call to fetch the exercise data
+            fetch(`/Statistics/GetExerciseData?exerciseId=${exerciseId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the chart with the new data
+                    chart.data.labels = data.dates;
+                    chart.data.datasets[0].data = data.weights;
+                    chart.update();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // Call updateChart initially with the default selected exercise ID
+        updateChart(selectedExerciseId);
+
+        // Handle selection of the default exercise option
+        document.getElementById('exerciseSelect').addEventListener('change', function () {
+            if (this.value === '') {
+                updateChart(@Model.SelectedExerciseId);
+            }
+        });
+
+    </script>
+}

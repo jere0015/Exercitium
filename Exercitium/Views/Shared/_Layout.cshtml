@@ -59,6 +59,7 @@
                                 @if (User.Identity.IsAuthenticated)
                                 {
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Profile</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
                                     @if (User.IsInRole("secret"))
                                     {
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CheckUser">Roles</a>

@@ -30,25 +30,8 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Workout" asp-action="Index">Workout</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Exercise" asp-action="Index">Exercise</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Statistics" asp-action="Index">Statistics</a>
                         </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <form asp-area="" asp-controller="Account" asp-action="Logout">
-                                    <button class="btn btn-outline-danger">Logout</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                            </li>
-                        }
                     </ul>
                     <ul>
                         <li class="dropdown">
@@ -62,7 +45,7 @@
                                     @if (User.IsInRole("secret"))
                                     {
                                         <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CheckUser">Roles</a>
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Exercise" asp-action="Index">Exercise</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Exercise" asp-action="Index">Exercises</a>
                                     }
                                     <div class="dropdown-divider"></div>
                                     <form asp-area="" asp-controller="Account" asp-action="Logout">

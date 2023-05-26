@@ -2,6 +2,7 @@
 using Exercitium.Data;
 using Exercitium.Models;
 using Exercitium.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -100,6 +101,7 @@ namespace Exercitium.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "secret")]
         public async Task<IActionResult> CheckUser()
         {
 
@@ -156,6 +158,7 @@ namespace Exercitium.Controllers
             return RedirectToAction("CheckUser");
         }
 
+        [Authorize]
         public IActionResult Profile()
         {
             return View();

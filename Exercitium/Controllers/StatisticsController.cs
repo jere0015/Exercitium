@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Exercitium.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Exercitium.Controllers
 {
+    [Authorize]
     public class StatisticsController : Controller
     {
         private readonly UserManager<User> _userManager;

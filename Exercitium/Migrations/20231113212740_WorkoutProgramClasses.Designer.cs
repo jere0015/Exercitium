@@ -4,6 +4,7 @@ using Exercitium.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Exercitium.Migrations
 {
     [DbContext(typeof(ExercitiumContext))]
-    partial class ExercitiumContextModelSnapshot : ModelSnapshot
+    [Migration("20231113212740_WorkoutProgramClasses")]
+    partial class WorkoutProgramClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,9 +185,6 @@ namespace Exercitium.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("WorkoutId")
                         .HasColumnType("int");
 
@@ -193,8 +193,6 @@ namespace Exercitium.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("WorkoutId")
                         .IsUnique();
@@ -390,38 +388,28 @@ namespace Exercitium.Migrations
 
             modelBuilder.Entity("Exercitium.Models.WorkoutProgram", b =>
                 {
-                    b.HasOne("Exercitium.Models.User", "User")
-                        .WithMany("WorkoutPrograms")
-                        .HasForeignKey("UserId");
-
                     b.HasOne("Exercitium.Models.Workout", "Workout")
                         .WithOne("WorkoutProgram")
                         .HasForeignKey("Exercitium.Models.WorkoutProgram", "WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-
                     b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("Exercitium.Models.WorkoutProgramExercise", b =>
                 {
-                    b.HasOne("Exercitium.Models.Exercise", "Exercise")
+                    b.HasOne("Exercitium.Models.Exercise", null)
                         .WithMany("WorkoutProgramExercises")
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Exercitium.Models.WorkoutProgram", "WorkoutProgram")
+                    b.HasOne("Exercitium.Models.WorkoutProgram", null)
                         .WithMany("WorkoutProgramExercises")
                         .HasForeignKey("WorkoutProgramId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Exercise");
-
-                    b.Navigation("WorkoutProgram");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -484,8 +472,6 @@ namespace Exercitium.Migrations
 
             modelBuilder.Entity("Exercitium.Models.User", b =>
                 {
-                    b.Navigation("WorkoutPrograms");
-
                     b.Navigation("Workouts");
                 });
 

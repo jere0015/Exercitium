@@ -8,5 +8,7 @@
         public ICollection<WorkoutExercise> WorkoutExercises { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
+
+        public WorkoutProgram WorkoutProgram { get; set; }
     }
 }
